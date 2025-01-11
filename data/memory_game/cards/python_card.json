@@ -1,0 +1,5 @@
+{
+  "type" : "card",
+  "name" : "Python Card",
+  "resource_location" : "memory_game:cards/card_python.png"
+}

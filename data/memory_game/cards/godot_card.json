@@ -1,0 +1,5 @@
+{
+  "type" : "card",
+  "name" : "Godot Card",
+  "resource_location" : "memory_game:cards/card_godot.png"
+}

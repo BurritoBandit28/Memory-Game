@@ -1,0 +1,5 @@
+{
+  "type" : "card",
+  "name" : "C++ Card",
+  "resource_location" : "memory_game:cards/card_cpp.png"
+}

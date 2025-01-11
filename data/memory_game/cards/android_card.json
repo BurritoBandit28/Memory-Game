@@ -1,0 +1,5 @@
+{
+  "type" : "card",
+  "name" : "Android Card",
+  "resource_location" : "memory_game:cards/card_android.png"
+}

@@ -1,0 +1,5 @@
+{
+  "type" : "card",
+  "name" : "Java Card",
+  "resource_location" : "memory_game:cards/card_java.png"
+}

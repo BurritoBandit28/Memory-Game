@@ -1,0 +1,5 @@
+{
+  "type" : "card",
+  "name" : "Go Card",
+  "resource_location" : "memory_game:cards/card_go.png"
+}

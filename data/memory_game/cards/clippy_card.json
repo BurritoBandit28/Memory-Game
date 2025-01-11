@@ -1,0 +1,5 @@
+{
+  "type" : "card",
+  "name" : "Clippy/Windows Card",
+  "resource_location" : "memory_game:cards/card_clippy.png"
+}

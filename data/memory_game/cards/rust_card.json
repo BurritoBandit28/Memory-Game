@@ -1,0 +1,5 @@
+{
+  "type" : "card",
+  "name" : "Rust Card",
+  "resource_location" : "memory_game:cards/card_rust.png"
+}
