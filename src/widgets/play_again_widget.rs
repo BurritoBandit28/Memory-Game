@@ -97,6 +97,7 @@ impl Widget for PlayAgainWidget {
             game.use_finger=false;
         }
 
+        // get asset data
         if game.get_player_1_score() + game.get_player_2_score() == 9 {
             if self.selected {
                 self.asset_data_selected.clone()
@@ -105,6 +106,7 @@ impl Widget for PlayAgainWidget {
             }
         }
         else {
+            // return invisible if game not over
             let mut ass = AssetData::empty();
             ass.resource_location = ResourceLocation::new("memory_game", "empty.png");
             ass

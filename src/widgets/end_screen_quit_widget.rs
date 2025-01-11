@@ -59,6 +59,7 @@ impl EndQuitWidget {
 
 impl Widget for EndQuitWidget {
     fn on_click(&mut self) {
+        // only run if game over
         let game = unsafe { &mut *self.game };
         if game.get_player_1_score() + game.get_player_2_score() == 9 {
             info!("Quitting");
@@ -84,10 +85,14 @@ impl Widget for EndQuitWidget {
     }
 
     fn get_asset_data(&mut self) -> AssetData {
+
+        // dont show finger if game is not over
         let game = unsafe { &mut *self.game };
         if (game.get_player_1_score() + game.get_player_2_score() != 9) && self.selected{
             game.use_finger=false;
         }
+
+        // ger asset data
         if game.get_player_1_score() + game.get_player_2_score() == 9 {
             if self.selected {
                 self.asset_data_selected.clone()
@@ -96,6 +101,7 @@ impl Widget for EndQuitWidget {
             }
         }
         else {
+            // return invisible texture if game not over
             let mut ass = AssetData::empty();
             ass.resource_location = ResourceLocation::new("memory_game", "empty.png");
             ass
