@@ -18,8 +18,8 @@ chrono = "0.4.38"
 walkdir = "2.5.0"
 gjson = "0.8.1"
 open = "5.3.0"
-kira = "0.9.5"
 rand = "0.8.5"
+rodio = "0.20.1"
 
 #sdl2 = "0.36.0"
 

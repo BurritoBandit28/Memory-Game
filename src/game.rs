@@ -6,8 +6,7 @@ use std::sync::Mutex;
 use std::thread::sleep;
 use std::time::Duration;
 use chrono::Month;
-use kira::manager::{AudioManager, AudioManagerSettings, DefaultBackend};
-use kira::sound::static_sound::StaticSoundData;
+use rodio::{Decoder, OutputStream, source::Source, OutputStreamHandle};
 use log::info;
 use num::bigint::U32Digits;
 use rand::Rng;
@@ -26,7 +25,7 @@ use crate::game::Turn::Player2;
 use crate::render::{draw_pp_texture, AssetData};
 use crate::resource_location::ResourceLocation;
 use crate::screen::Screen;
-use crate::sound::Sound;
+use crate::sound::{AudioManager, Sound};
 use crate::tile::{Tile, TileSize};
 use crate::utils::order_sort;
 use crate::widget::{Alignment, Widget};
@@ -57,7 +56,8 @@ pub struct Game {
     pub wait_timer : f32,
     pub prev_success : bool,
     player_1_score : u32,
-    player_2_score : u32
+    player_2_score : u32,
+    audio_manager: AudioManager
 }
 
 #[derive(Debug)]
@@ -344,10 +344,9 @@ impl Game {
     }
 
     /// Plays a sound file given a [`ResourceLocation`]
-    pub fn play_sound(&mut self, resource_location : ResourceLocation) {
-        // get sound file
-        let sound_data = StaticSoundData::from_file(&self.sounds.get(&resource_location.to_string()).unwrap().path).unwrap();
-        sound::get_audio_manager().lock().unwrap().play(sound_data.clone()).unwrap();
+    pub fn play_sound(&self, resource_location : ResourceLocation) {
+        let am = &self.audio_manager;
+        am.play_sound(resource_location, &self.sounds)
     }
 
     /// Create a [`Game`] instance
@@ -377,7 +376,8 @@ impl Game {
             wait_timer : -1.0,
             prev_success: false,
             player_1_score : 0,
-            player_2_score : 0
+            player_2_score : 0,
+            audio_manager : AudioManager::create()
         }
         
     }

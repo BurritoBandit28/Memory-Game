@@ -24,6 +24,7 @@ pub struct CardEntity {
     resource_location: ResourceLocation,
     index : usize,
     hover : bool,
+    prev_hover : bool,
     selected : bool,
     x: f32,
     y : f32,
@@ -132,6 +133,10 @@ impl Entity for CardEntity {
         else { // otherwise set to default coordinates, incase it was hovered last frame.
             self.coords = (self.x, self.y)
         }
+        if self.hover && !self.prev_hover {
+            game.play_sound(ResourceLocation::new("memory_game", "sounds/pop.ogg"))
+        }
+        self.prev_hover = self.hover
     }
 
     fn get_resource_location(&self) -> &ResourceLocation {
@@ -192,6 +197,7 @@ impl CardEntity {
             resource_location: ResourceLocation::empty(),//card.resource_location,
             index : 0,
             hover : false,
+            prev_hover: false,
             selected: false,
             x,
             y,
