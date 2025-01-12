@@ -105,6 +105,7 @@ impl Entity for CardEntity {
                         ..
                     } => {
                         self.selected = true; // set selected to true
+                        game.play_sound(ResourceLocation::new("memory_game", "sounds/flip.ogg"));
                         if game.selected_count==0 { // if none selected
                             game.selected_count+=1; // increment selected counter
                             game.selected_cards.0 = self.card.clone() // set the first value to this card
