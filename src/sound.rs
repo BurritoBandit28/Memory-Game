@@ -14,8 +14,9 @@ pub struct Sound {
 }
 
 
+/// A struct containing components required for sound playback
 pub struct AudioManager {
-    stream: OutputStream,
+    stream: OutputStream, // this value cannot be dropped, else audio playback stops, hence this struct
     stream_handle : OutputStreamHandle
 }
 
@@ -29,8 +30,11 @@ impl AudioManager {
         }
     }
 
-    pub fn play_sound(&self, rl : ResourceLocation, sounds : &HashMap<String, Sound>) {
-        let sound_data = Decoder::new(BufReader::new(File::open(&sounds.get(&rl.to_string()).unwrap().path).unwrap())).unwrap();
+    /// Plays sound given the sound map and resource location.
+    pub fn play_sound(&self, sound : &Sound) {
+        // use data within the Sound type to get playable data
+        let sound_data = Decoder::new(BufReader::new(File::open(&sound.path).unwrap())).unwrap();
+        // play the sound
         self.stream_handle.play_raw(sound_data.convert_samples()).expect("Something went wrong with audio playback");
     }
 

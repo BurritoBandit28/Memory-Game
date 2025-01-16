@@ -117,11 +117,7 @@ impl Widget for PlayerWidget {
         }
         let x_y = self.correct_coords(dims);
         if debug {
-            render::draw_pp_texture(x_y.0, x_y.1, {
-                let mut debug_thing = self.get_debug_asset_data();
-                debug_thing.uv = self.get_asset_data().uv;
-                &debug_thing.clone()
-            }, canvas, sf, &textures);
+            render::draw_pp_texture(x_y.0, x_y.1, &self.get_debug_asset_data(), canvas, sf, &textures);
         }
         render::draw_pp_texture(x_y.0, x_y.1, &self.get_asset_data(), canvas, sf, &textures);
         for x in 0..self.score {

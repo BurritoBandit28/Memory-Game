@@ -7,7 +7,7 @@ use std::thread::sleep;
 use std::time::Duration;
 use chrono::Month;
 use rodio::{Decoder, OutputStream, source::Source, OutputStreamHandle};
-use log::info;
+use log::{info, warn};
 use num::bigint::U32Digits;
 use rand::Rng;
 use sdl2::event::Event;
@@ -345,8 +345,17 @@ impl Game {
 
     /// Plays a sound file given a [`ResourceLocation`]
     pub fn play_sound(&self, resource_location : ResourceLocation) {
-        let am = &self.audio_manager;
-        am.play_sound(resource_location, &self.sounds)
+        // get sound from mao
+        let sound  = self.sounds.get(&resource_location.to_string());
+        // if the sound exists, play it
+        if sound.is_some() {
+            self.audio_manager.play_sound(sound.unwrap())
+        }
+        // else, warn in the logs.
+        else {
+            warn!("Sound {} not found!", resource_location.to_string())
+        }
+
     }
 
     /// Create a [`Game`] instance
