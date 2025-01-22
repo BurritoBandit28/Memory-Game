@@ -150,7 +150,7 @@ impl Game {
 
         // if there is a current screen, run its cycle function
         let _ = if self.current_screen.is_some() {
-            self.current_screen.as_mut().unwrap().cycle(mousex, mousey, dims, self.events.clone())
+            self.current_screen.as_mut().unwrap().cycle(mousex, mousey, self.events.clone())
         };
 
         // handle user inputs
@@ -257,7 +257,7 @@ impl Game {
                     let mut ass = card_asset_base.clone();
                     ass.resource_location = card.get_texture_location();
                     ass
-                }, pos.0, pos.1, card.clone());
+                }, pos.0-16.0, pos.1, card.clone());
                 cards.push(card);
                 counter +=1;
             }

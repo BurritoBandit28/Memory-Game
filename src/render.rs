@@ -12,7 +12,7 @@ use sdl2::pixels::Color;
 use crate::render;
 use crate::resource_location::ResourceLocation;
 
-pub const DIMENSIONS: (u32, u32) = (448, 252);
+pub const TARGET_DIMENSIONS: (u32, u32) = (448, 252);
 
 /// A struct which holds all relevant information for displaying an item's texture.
 #[derive(Debug)]
@@ -43,6 +43,33 @@ impl Clone for AssetData {
     }
 }
 
+pub struct Dimensions {
+    x : u32,
+    y : u32
+}
+
+impl Dimensions {
+    pub fn get_x(&self) -> u32 {
+        self.x
+    }
+    pub fn get_y(&self) -> u32 {
+        self.y
+    }
+    pub fn set_x(&mut self, x : u32) {
+        self.x = x
+    }
+    pub fn set_y(&mut self, y : u32) {
+        self.y = y
+    }
+    pub fn set(&mut self, dims : (u32, u32)) {
+        self.x = dims.0;
+        self.y = dims.1
+    }
+    pub fn get(&self) -> (u32, u32) {
+        (self.x, self.y)
+    }
+}
+
 
 /// Access a static list of ResourceLocations with missing textures.
 pub fn get_missing_list() -> &'static Mutex<Vec<String>>{
@@ -50,6 +77,16 @@ pub fn get_missing_list() -> &'static Mutex<Vec<String>>{
     INSTANCE.get_or_init(|| {
         let vec : Vec<String> = vec![];
         Mutex::new(vec)
+    })
+}
+
+pub fn get_actual_dimensions() -> &'static Mutex<Dimensions> {
+    static INSTANCE : OnceCell<Mutex<Dimensions>> = OnceCell::new();
+    INSTANCE.get_or_init(|| {
+        Mutex::new(Dimensions{
+            x: TARGET_DIMENSIONS.0,
+            y: TARGET_DIMENSIONS.1,
+        })
     })
 }
 

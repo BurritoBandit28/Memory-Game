@@ -83,7 +83,7 @@ impl Widget for ScoreWidget {
     fn get_game(&mut self) {
     }
 
-    fn render(&mut self, textures: &HashMap<String, Texture>, sf: i32, canvas: &mut WindowCanvas, dims: (u32, u32), debug : bool) {
+    fn render(&mut self, textures: &HashMap<String, Texture>, sf: i32, canvas: &mut WindowCanvas, debug : bool) {
         let game = unsafe { &mut *self.game };
         let score_as_string = format!("{}",game.score.clone() as u32);
         let mut counter = 0;

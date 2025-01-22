@@ -34,12 +34,12 @@ pub trait Screen {
     fn create(game : &mut Game) -> Box<Self> where Self: Sized;
 
     /// What the screen does every frame
-    fn cycle(&mut self, mousex : u32, mousey : u32, dims : (u32, u32), events: Vec<Event>) {
+    fn cycle(&mut self, mousex : u32, mousey : u32, events: Vec<Event>) {
         let game = unsafe { &mut *self.get_game() };
         for widgets in self.get_widgets() {
             for w in widgets {
                 let _ = w.set_selected(false);
-                let mut coords = w.correct_coords(dims);
+                let mut coords = w.correct_coords();
 
                 let uv = w.get_asset_data().uv;
 
@@ -61,7 +61,7 @@ pub trait Screen {
     fn render(&mut self, textures : &HashMap<String, Texture>, sf : i32, canvas : &mut WindowCanvas, dims : (u32, u32), debug : bool) {
         for widgets in self.get_widgets() {
             for w in widgets {
-                w.render(textures, sf, canvas, dims, debug);
+                w.render(textures, sf, canvas, debug);
             }
         }
     }

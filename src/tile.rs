@@ -226,8 +226,8 @@ impl Tile {
         let y = coords.1;
         let px = (if player_coords.0 < 0.0 {player_coords.0 - 1.0} else { player_coords.0 }) as i32;
         let py = (if player_coords.1 < 0.0 {player_coords.1 - 1.0} else { player_coords.1 }) as i32;
-        let half_x = (render::DIMENSIONS.0 / 2) as i32;
-        let half_y = (render::DIMENSIONS.1 / 2) as i32;
+        let half_x = (render::TARGET_DIMENSIONS.0 / 2) as i32;
+        let half_y = (render::TARGET_DIMENSIONS.1 / 2) as i32;
         ((half_x - px) + x, (half_y - py ) + y)
     }
 

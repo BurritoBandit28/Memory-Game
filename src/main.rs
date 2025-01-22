@@ -24,7 +24,7 @@ use crate::screens::main_menu_screen;
 use crate::entity::Entity;
 use crate::game::Game;
 use num::clamp;
-use render::DIMENSIONS;
+use render::TARGET_DIMENSIONS;
 use sdl2::event::Event;
 use sdl2::image::LoadTexture;
 use sdl2::keyboard::Keycode;
@@ -57,11 +57,14 @@ fn main() {
     // start SDL2
     let sdl_ctx = sdl2::init().unwrap();
     let scale_factor =
-        sdl_ctx.video().unwrap().current_display_mode(0).unwrap().w / DIMENSIONS.0 as i32;
+        sdl_ctx.video().unwrap().current_display_mode(0).unwrap().w / TARGET_DIMENSIONS.0 as i32;
     let video_subsys = sdl_ctx.video().unwrap();
 
     // the actual dimensions of the game screen, as they won't always be 320/180 due to differing aspect ratios
     let dims = ((sdl_ctx.video().unwrap().current_display_mode(0).unwrap().w / scale_factor) as u32, (sdl_ctx.video().unwrap().current_display_mode(0).unwrap().h / scale_factor) as u32);
+
+    println!("{:?}", dims);
+    render::get_actual_dimensions().lock().unwrap().set(dims);
 
     let scale_offset = (sdl_ctx.video().unwrap().current_display_mode(0).unwrap().h / scale_factor as i32) - 180;
     //todo : get the difference in height and display 2 black bars to give 16:9 ratio screen
@@ -71,7 +74,7 @@ fn main() {
 
     // create window
     let mut window = video_subsys
-        .window("[Game name here]", DIMENSIONS.0, DIMENSIONS.1)
+        .window("Memory Game", TARGET_DIMENSIONS.0, TARGET_DIMENSIONS.1)
         .vulkan()
         .fullscreen_desktop()
         .build()

@@ -81,12 +81,13 @@ pub trait Entity {
 
     /// converts world space coordinates to screen coordinates.
     fn screen(&mut self, player_coords :  (f32, f32)) -> (i32, i32) {
+        let dims = render::get_actual_dimensions().lock().unwrap().get();
         let x = self.get_coords().0;
         let y = self.get_coords().1;
         let px = player_coords.0 as i32;
         let py = player_coords.1 as i32;
-        let half_x = (render::DIMENSIONS.0 / 2) as i32;
-        let half_y = (render::DIMENSIONS.1 / 2) as i32;
+        let half_x = (dims.0 / 2) as i32;
+        let half_y = (dims.1 / 2) as i32;
 
         // if the player coordinates are negative, then the rounding would be incorrect, as values such as -1.4 would round to -1, and not -2 as desired for the rendering to be correct.
         //let px = (if player_coords.0 < 0.0 {player_coords.0 - 1.0} else { player_coords.0 }) as i32;

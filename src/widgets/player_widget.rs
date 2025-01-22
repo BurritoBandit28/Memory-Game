@@ -105,7 +105,7 @@ impl Widget for PlayerWidget {
         todo!()
     }
 
-    fn render(&mut self, textures: &HashMap<String, Texture>, sf: i32, canvas: &mut WindowCanvas, dims: (u32, u32), debug: bool) {
+    fn render(&mut self, textures: &HashMap<String, Texture>, sf: i32, canvas: &mut WindowCanvas, debug: bool) {
         let game = unsafe { &mut *self.game};
 
         if self.selected {
@@ -115,7 +115,7 @@ impl Widget for PlayerWidget {
             Turn::Player1 => {self.score = game.get_player_1_score(); self.active= game.current_turn==Turn::Player1;}
             Turn::Player2 => {self.score = game.get_player_2_score(); self.active= game.current_turn==Turn::Player2;}
         }
-        let x_y = self.correct_coords(dims);
+        let x_y = self.correct_coords();
         if debug {
             render::draw_pp_texture(x_y.0, x_y.1, &self.get_debug_asset_data(), canvas, sf, &textures);
         }

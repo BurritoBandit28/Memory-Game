@@ -24,7 +24,8 @@ pub trait Widget {
     #[must_use]
     fn set_screen_coordinates(&mut self, x : i32, y : i32);
 
-    fn correct_coords(&mut self, dims : (u32, u32)) -> (i32, i32){
+    fn correct_coords(&mut self) -> (i32, i32){
+        let dims = render::get_actual_dimensions().lock().unwrap().get();
         let coords = self.get_screen_coordinates();
         match self.get_allignment() {
             Alignment::RIGHT => {
@@ -77,8 +78,8 @@ pub trait Widget {
         None
     }
 
-    fn render(&mut self, textures : &HashMap<String, Texture>, sf : i32, canvas : &mut WindowCanvas, dims : (u32, u32), debug : bool) {
-        let coords = self.correct_coords(dims);
+    fn render(&mut self, textures : &HashMap<String, Texture>, sf : i32, canvas : &mut WindowCanvas, debug : bool) {
+        let coords = self.correct_coords();
         if debug {
             render::draw_pp_texture(coords.0, coords.1, &self.get_debug_asset_data(), canvas, sf, textures)
         }
