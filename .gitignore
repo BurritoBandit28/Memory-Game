@@ -3,3 +3,4 @@ SDL2.dll
 SDL2_image.dll
 /log
 /scores
+/data/memory_game/tiles/persistance.txt

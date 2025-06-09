@@ -6,6 +6,7 @@ use std::sync::Mutex;
 use std::thread::sleep;
 use std::time::Duration;
 use chrono::Month;
+#[cfg(not(target_os = "emscripten"))]
 use rodio::{Decoder, OutputStream, source::Source, OutputStreamHandle};
 use log::{info, warn};
 use num::bigint::U32Digits;
@@ -349,6 +350,7 @@ impl Game {
         let sound  = self.sounds.get(&resource_location.to_string());
         // if the sound exists, play it
         if sound.is_some() {
+            #[cfg(not(target_os = "emscripten"))]
             self.audio_manager.play_sound(sound.unwrap())
         }
         // else, warn in the logs.

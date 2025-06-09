@@ -15,7 +15,11 @@ chrono = "0.4.38"
 walkdir = "2.5.0"
 gjson = "0.8.1"
 rand = "0.8.5"
+
+
+[target.'cfg(not(target_os = "emscripten"))'.dependencies]
 rodio = "0.20.1"
+
 
 [features]
 sdl2 = ["sdl2/bundled", "sdl2/image"]

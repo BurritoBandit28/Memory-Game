@@ -45,6 +45,10 @@ use crate::tile::{Tile, TileSize, TileType};
 use crate::widget::Alignment;
 use crate::screens::main_menu_screen::MainMenuScreen;
 
+
+#[cfg(target_os = "emscripten")]
+pub mod emscripten;
+
 fn main() {
 
     // initial set up
@@ -73,9 +77,19 @@ fn main() {
     sdl_ctx.mouse().show_cursor(false);
 
     // create window
+    #[cfg(not(target_os = "emscripten"))]
     let mut window = video_subsys
         .window("Memory Game", TARGET_DIMENSIONS.0, TARGET_DIMENSIONS.1)
         .vulkan()
+        .fullscreen_desktop()
+        .build()
+        .unwrap();
+
+    // create window
+    #[cfg(target_os = "emscripten")]
+    let mut window = video_subsys
+        .window("Memory Game", TARGET_DIMENSIONS.0, TARGET_DIMENSIONS.1)
+        .opengl() // emscripten doesnt support vulkan
         .fullscreen_desktop()
         .build()
         .unwrap();
@@ -357,49 +371,69 @@ fn main() {
 
     info!("Game instance initiated!");
 
-    while game.running {
-        //canvas.clear();
 
-        // begin timer for delta
-        let start = Instant::now();
+    let mut main_loop = || {
 
-        game.use_finger = false;
+        if game.running {
+            //canvas.clear();
 
-        // draw background texture
-        canvas
-            .copy_ex(
-                &textures.get("memory_game:background.png").unwrap(),
-                None,
-                Rect::new(0, 0, dims.0, dims.1),
-                0.0,
-                None,
-                false,
-                false,
-            )
-            .expect("TODO: panic message");
+            // begin timer for delta
+            let start = Instant::now();
 
-        // get keys that are held down
-        game.held_keys = vec![];
-        for key in event_pump.keyboard_state().pressed_scancodes() {
-            game.held_keys.push(key);
+            game.use_finger = false;
+
+            // draw background texture
+            canvas
+                .copy_ex(
+                    &textures.get("memory_game:background.png").unwrap(),
+                    None,
+                    Rect::new(0, 0, dims.0, dims.1),
+                    0.0,
+                    None,
+                    false,
+                    false,
+                )
+                .expect("TODO: panic message");
+
+            // get keys that are held down
+            game.held_keys = vec![];
+            for key in event_pump.keyboard_state().pressed_scancodes() {
+                game.held_keys.push(key);
+            }
+
+            // get keys that are pressed
+            game.events = vec![];
+            for event in event_pump.poll_iter() {
+                game.events.push(event.clone());
+            }
+
+            game.mouse = ((event_pump.mouse_state().x() / scale_factor) as u32, (event_pump.mouse_state().y() / scale_factor) as u32);
+
+            // run a game cycle
+            game.cycle(delta, (event_pump.mouse_state().x() / scale_factor) as u32, (event_pump.mouse_state().y() / scale_factor) as u32, dims);
+
+            // run game render
+            game.render(canvas, scale_factor, &textures, dims, (event_pump.mouse_state().x() / scale_factor) as u32, (event_pump.mouse_state().y() / scale_factor) as u32);
+
+            // present screen buffer to user
+            canvas.present();
+            delta = start.elapsed().as_secs_f32();
+        }
+        else {
+            std::process::exit(1);
         }
 
-        // get keys that are pressed
-        game.events = vec![];
-        for event in event_pump.poll_iter() {
-            game.events.push(event.clone());
-        }
+    };
 
-        game.mouse = ((event_pump.mouse_state().x() / scale_factor) as u32, (event_pump.mouse_state().y() / scale_factor) as u32);
+    #[cfg(target_os = "emscripten")]
+    use crate::{emscripten};
 
-        // run a game cycle
-        game.cycle(delta, (event_pump.mouse_state().x() / scale_factor) as u32, (event_pump.mouse_state().y() / scale_factor) as u32, dims);
+    #[cfg(target_os = "emscripten")]
+    emscripten::emscripten::set_main_loop_callback(main_loop);
 
-        // run game render
-        game.render(canvas, scale_factor, &textures, dims, (event_pump.mouse_state().x() / scale_factor) as u32, (event_pump.mouse_state().y() / scale_factor) as u32);
 
-        // present screen buffer to user
-        canvas.present();
-        delta = start.elapsed().as_secs_f32();
-    }
+
+    #[cfg(not(target_os = "emscripten"))]
+    loop { main_loop(); }
+
 }
