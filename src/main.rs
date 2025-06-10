@@ -49,6 +49,16 @@ use crate::screens::main_menu_screen::MainMenuScreen;
 #[cfg(target_os = "emscripten")]
 pub mod emscripten;
 
+#[cfg(target_os = "emscripten")]
+macro_rules! info {
+    ($($arg:tt)*) => {{
+        let message = format!($($arg)*);
+
+        std::println!("{}", message);
+
+    }};
+}
+
 fn main() {
 
     // initial set up
